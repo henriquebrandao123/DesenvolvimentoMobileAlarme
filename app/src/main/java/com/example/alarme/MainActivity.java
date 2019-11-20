@@ -4,11 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.Calendar;
@@ -25,8 +27,18 @@ public class MainActivity extends AppCompatActivity  {
         btAlarme.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                agendar();
-                finish();
+
+                TimePickerDialog timePickerDialog = new TimePickerDialog(MainActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+
+                    }
+                }, 0, 0, false);
+
+                timePickerDialog.show();
+               
+                //agendar();
+                //finish();
             }
         });
     }
