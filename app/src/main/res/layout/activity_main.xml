@@ -20,14 +20,16 @@
         app:layout_constraintVertical_bias="0.044"
         tools:text="Nenhum Alarme Agendado" />
 
-    <Button
-        android:id="@+id/btAlarme"
-        android:layout_width="323dp"
-        android:layout_height="49dp"
-        android:layout_marginBottom="50dp"
-        android:text="Agendar Alarme"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btAdd"
+        android:layout_width="56dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="60dp"
+        android:layout_marginRight="60dp"
+        android:layout_marginBottom="48dp"
+        android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:srcCompat="@android:drawable/ic_input_add" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

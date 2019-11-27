@@ -13,6 +13,7 @@ public class ReceberAlarme  extends BroadcastReceiver {
     {
         Toast.makeText(c, "Alarme!!!!", Toast.LENGTH_SHORT).show();
         Intent i2 = new Intent(c, Alarme.class);
+        i2.putExtra(Alarme.EXTRA_LIGAR_E_DESTRAVAR_TELA, true);
         i2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         c.startActivity(i2);
     }

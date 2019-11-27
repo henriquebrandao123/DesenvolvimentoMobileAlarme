@@ -15,23 +15,30 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity  {
 
-    private Button btAlarme;
     private TextView status;
-
+    private FloatingActionButton btAdd;
     private int currentHour;
     private int currentMinute;
     private int seconds;
     private long time;
 
-    @Override
+   @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        btAdd = findViewById(R.id.btAdd);
+
+        btAdd.setOnClickListener(View.OnClickListener(){
+
+
+/*
         status = findViewById(R.id.txtStatus);
         btAlarme = findViewById(R.id.btAlarme);
 
@@ -73,7 +80,7 @@ public class MainActivity extends AppCompatActivity  {
 
                 //finish();
             }
-        });
+        });*/
     }
 
 
