@@ -37,6 +37,7 @@ public class Alarme extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 vibrator.cancel();
+                finish();
             }
         });
     }

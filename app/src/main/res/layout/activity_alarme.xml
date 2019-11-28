@@ -31,4 +31,11 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <com.google.android.material.chip.Chip
+        android:id="@+id/chip"
+        android:layout_width="78dp"
+        android:layout_height="41dp"
+        tools:layout_editor_absoluteX="222dp"
+        tools:layout_editor_absoluteY="133dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

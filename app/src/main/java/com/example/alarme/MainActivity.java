@@ -22,20 +22,25 @@ import java.util.Calendar;
 public class MainActivity extends AppCompatActivity  {
 
     private TextView status;
-    private FloatingActionButton btAdd;
-    private int currentHour;
-    private int currentMinute;
-    private int seconds;
-    private long time;
+    private FloatingActionButton btAdd1;
+
 
    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        btAdd = findViewById(R.id.btAdd);
+        btAdd1 = findViewById(R.id.btAdd);
 
-        btAdd.setOnClickListener(View.OnClickListener(){
+        btAdd1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(v.getContext(), ConfigurarAlarme.class);
+                startActivity(intent);
+
+            }
+        });
 
 
 /*
@@ -84,20 +89,7 @@ public class MainActivity extends AppCompatActivity  {
     }
 
 
-    public void agendar(long timer)
-    {
-        Intent it = new Intent("EXECUTAR_ALARME");
-        PendingIntent p = PendingIntent.getBroadcast(MainActivity.this, 0, it, 0);
 
-        // agendar o alarme
-
-        AlarmManager alarme = (AlarmManager) getSystemService(ALARM_SERVICE);
-
-        alarme.set(AlarmManager.RTC_WAKEUP, timer, p);
-
-        Toast.makeText(getApplication(),"Alarme Agendado ", Toast.LENGTH_LONG).show();
-        Log.i("Alarme", "Alarme agendado!");
-    }
 
 
     @Override
