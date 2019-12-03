@@ -1,33 +1,38 @@
 package com.example.alarme;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import com.example.alarme.modal.ManagerAlarm;
+import com.example.alarme.modal.PreferencesAlarme;
 
 import java.util.Calendar;
 
 public class ConfigurarAlarme extends AppCompatActivity {
 
 
+    private static final int REQ_CODE_PICK_SOUNDFILE =  1;
     private ImageView btAccept;
     private ImageView btCancel;
     private TextView txtHora;
+    private Button btToque;
+    private int hora;
+    private int minuto;
 
-    private int currentHour;
-    private int currentMinute;
-    private int seconds;
-    private long time;
-    private Calendar c = Calendar.getInstance();
 
 
 
@@ -40,21 +45,21 @@ public class ConfigurarAlarme extends AppCompatActivity {
         btAccept = findViewById(R.id.imgAccept);
         btCancel = findViewById(R.id.imgCancel);
         txtHora = findViewById(R.id.txtHora);
+        btToque = findViewById(R.id.btToque);
 
-        currentHour = c.get(Calendar.HOUR_OF_DAY);
-        currentMinute = c.get(Calendar.MINUTE);
+        hora = 19;
+        minuto = 21;
 
-        txtHora.setText(currentHour + ":" + currentMinute);
-
-
+        txtHora.setText(hora + ":" + minuto);
 
         btAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                agendar(time);
-                finish();
+                ManagerAlarm.AgendarAlarme(v.getContext(), hora, minuto);
+                PreferencesAlarme.setStatusAlarme(v.getContext(), "status", 1);
 
+                finish();
             }
         });
 
@@ -71,49 +76,58 @@ public class ConfigurarAlarme extends AppCompatActivity {
                 TimerPicker();
             }
         });
+
+        btToque.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectImage();
+            }
+        });
     }
 
 
-    void TimerPicker()
-    {
+    void TimerPicker() {
 
         TimePickerDialog timePickerDialog = new TimePickerDialog(ConfigurarAlarme.this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 
-                seconds = (hourOfDay * 3600 +  minute * 60) - (currentHour * 3600 +  currentMinute * 60);
+                hora = hourOfDay;
+                minuto = minute;
 
-                Calendar c = Calendar.getInstance();
+                if (hora < 10)
+                    txtHora.setText("0" + hourOfDay + ":" + minute);
+                if (minuto < 10)
+                    txtHora.setText(hourOfDay + ":" + "0" + minute);
+                if (hora < 10 && minuto < 10)
+                    txtHora.setText("0" + hourOfDay + ":" + "0" + minute);
+                if (hora > 10 || minuto > 10)
+                    txtHora.setText(hourOfDay + ":" + minute);
 
-                c.setTimeInMillis(System.currentTimeMillis());
 
-                c.add(Calendar.SECOND, seconds);
-
-                time = c.getTimeInMillis();
-
-                txtHora.setText(hourOfDay + ":" + minute);
-
+                PreferencesAlarme.setHoraAlarme(ConfigurarAlarme.this, "hora", txtHora.getText().toString());
 
 
             }
-        }, currentHour, currentMinute, true);
+        }, 19, 21, true);
 
         timePickerDialog.show();
 
     }
 
-    public void agendar(long timer)
-    {
-        Intent it = new Intent("EXECUTAR_ALARME");
-        PendingIntent p = PendingIntent.getBroadcast(ConfigurarAlarme.this, 0, it, 0);
-
-        // agendar o alarme
-        AlarmManager alarme = (AlarmManager) getSystemService(ALARM_SERVICE);
-
-        alarme.set(AlarmManager.RTC_WAKEUP, timer, p);
-
-        Toast.makeText(getApplication(),"Alarme Agendado ", Toast.LENGTH_LONG).show();
-        Log.i("Alarme", "Alarme agendado!");
+    public void selectImage() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("audio/mpeg");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        // Only the system receives the ACTION_OPEN_DOCUMENT, so no need to test.
+        startActivityForResult(Intent.createChooser(intent, getString(R.string.select_audio_file_title)), REQ_CODE_PICK_SOUNDFILE);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQ_CODE_PICK_SOUNDFILE && resultCode == RESULT_OK) {
+            Uri fullPhotoUri = data.getData();
+        }
+    }
 }

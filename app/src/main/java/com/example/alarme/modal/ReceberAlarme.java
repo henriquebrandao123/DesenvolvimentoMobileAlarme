@@ -1,10 +1,12 @@
-package com.example.alarme;
+package com.example.alarme.modal;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
+
+import com.example.alarme.Alarme;
 
 
 public class ReceberAlarme  extends BroadcastReceiver {

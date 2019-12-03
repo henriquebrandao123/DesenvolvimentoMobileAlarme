@@ -2,26 +2,23 @@ package com.example.alarme;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.webkit.ServiceWorkerController;
-import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.alarme.modal.ManagerAlarm;
+import com.example.alarme.modal.PreferencesAlarme;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity  {
 
     private TextView status;
+    private TextView txtAlarme;
+    private Switch btDesligar ;
     private FloatingActionButton btAdd1;
 
 
@@ -31,6 +28,18 @@ public class MainActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_main);
 
         btAdd1 = findViewById(R.id.btAdd);
+        btDesligar = findViewById(R.id.switchDesativar);
+        txtAlarme = findViewById(R.id.txtAlarme);
+
+       if(PreferencesAlarme.getStatusAlarme(this,"status") == 1)
+       {
+           btDesligar.setChecked(true);
+       }
+       else{
+
+            btDesligar.setChecked(false);
+       }
+
 
         btAdd1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,59 +51,52 @@ public class MainActivity extends AppCompatActivity  {
             }
         });
 
-
-/*
-        status = findViewById(R.id.txtStatus);
-        btAlarme = findViewById(R.id.btAlarme);
-
-        btAlarme.setOnClickListener(new View.OnClickListener() {
+        btDesligar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                   if(PreferencesAlarme.getStatusAlarme(buttonView.getContext(),"status") == 0)
+                   {
+                       String  horaAlarme = PreferencesAlarme.getHoraAlarme(buttonView.getContext(),"hora");
+                       ManagerAlarm.AgendarAlarme(buttonView.getContext(),Integer.parseInt(horaAlarme.substring(0,2)),Integer.parseInt(horaAlarme.substring(3)));
 
-                Calendar c = Calendar.getInstance();
+                   }
 
-                currentHour = c.get(Calendar.HOUR_OF_DAY);
-                currentMinute = c.get(Calendar.MINUTE);
+                   Toast.makeText(getApplication(),"Alarme Ativado", Toast.LENGTH_SHORT).show();
 
-                TimePickerDialog timePickerDialog = new TimePickerDialog(MainActivity.this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-
-                        seconds = (hourOfDay * 3600 +  minute * 60) - (currentHour * 3600 +  currentMinute * 60) ;
-
-                        Calendar c = Calendar.getInstance();
-
-                        c.setTimeInMillis(System.currentTimeMillis());
-
-                        c.add(Calendar.SECOND, seconds);
-
-                        time = c.getTimeInMillis();
-
-                        status.setText(""+seconds);
-                        agendar(time);
-
-
-
-
-                    }
-                }, currentHour, currentMinute, true);
-
-                timePickerDialog.show();
-
-
-
-                //finish();
+                }
+                else
+                {
+                  Toast.makeText(getApplication(),"Alarme Desativado", Toast.LENGTH_SHORT).show();
+                  PreferencesAlarme.setStatusAlarme(buttonView.getContext(),"status",0);
+                  ManagerAlarm.CancelarAlarme(buttonView.getContext());
+                }
             }
-        });*/
+        });
+
+       txtAlarme.setText(PreferencesAlarme.getHoraAlarme(this,"hora"));
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        txtAlarme.setText(PreferencesAlarme.getHoraAlarme(this,"hora"));
+        if(PreferencesAlarme.getStatusAlarme(this,"status") == 1){
+            btDesligar.setChecked(true);
+        }
+        else {
+            btDesligar.setChecked(false);
+        }
 
+
+   }
 
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
 
     }
 }
