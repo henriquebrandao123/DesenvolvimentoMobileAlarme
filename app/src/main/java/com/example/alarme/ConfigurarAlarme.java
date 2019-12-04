@@ -32,6 +32,7 @@ public class ConfigurarAlarme extends AppCompatActivity {
     private Button btToque;
     private int hora;
     private int minuto;
+    private TextView txtToque;
 
 
 
@@ -46,6 +47,7 @@ public class ConfigurarAlarme extends AppCompatActivity {
         btCancel = findViewById(R.id.imgCancel);
         txtHora = findViewById(R.id.txtHora);
         btToque = findViewById(R.id.btToque);
+        txtToque = findViewById(R.id.txtTituloToque);
 
         hora = 19;
         minuto = 21;
@@ -128,6 +130,7 @@ public class ConfigurarAlarme extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQ_CODE_PICK_SOUNDFILE && resultCode == RESULT_OK) {
             Uri fullPhotoUri = data.getData();
+            txtToque.setText(getString(R.string.select_audio_file_title));
         }
     }
 }

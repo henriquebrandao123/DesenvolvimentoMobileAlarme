@@ -7,10 +7,6 @@ public class PreferencesAlarme {
 
     //private static Context context;
 
-    private String horaMinuto;
-    private String tempo;
-    private String melodia;
-
 
 
     public final static String PREFS_NAME = "appname_prefs";
